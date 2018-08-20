@@ -1,6 +1,6 @@
 <template>
   <li>
-      <h3>{{ pirate.name }}</h3>
+      <h3 v-bind:class="{ captain: pirate.role === 'captain' }">{{ pirate.name }}</h3>
       <p v-if="pirate.role === 'captain'">
         <strong>Captain of the {{ pirate.crew}}</strong>
       </p>
