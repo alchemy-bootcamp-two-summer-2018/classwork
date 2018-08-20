@@ -1,33 +1,34 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld 
-      v-bind:msg="msg"
-      foo="here is foo"
-    />
-    <button v-on:click="handleClick">Change Message</button>
-    <Pirates/>
+    <AddPirate v-bind:onAdd="handleAdd"/>
+    <PirateList v-bind:pirates="pirates" v-bind:onRemove="handleRemove"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
-import Pirates from './components/Pirates.vue';
+import PirateList from './components/PirateList.vue';
+import AddPirate from './components/AddPirate.vue';
+import pirates from './pirates';
 
 export default {
   name: 'app',
   data() {
-    return {
-      msg: 'App message for Hello World'
-    };
+    return { pirates };
   },
   components: {
-    HelloWorld,
-    Pirates
+    AddPirate,
+    PirateList
   },
   methods: {
-    handleClick() {
-      this.msg = 'The new message';
+    handleAdd(pirate) {
+      this.pirates.push(pirate);
+    },
+    handleRemove(pirate) {
+      const index = this.pirates.indexOf(pirate);
+      if(index !== -1) {
+        this.pirates.splice(index, 1);
+      }
     }
   }
 };
