@@ -1,9 +1,10 @@
 <template>
-  <div id="app">
+  <section>
     <img alt="Vue logo" src="./assets/logo.png">
+    <p>some random content</p>
     <AddPirate v-bind:onAdd="handleAdd"/>
     <PirateList v-bind:pirates="pirates" v-bind:onRemove="handleRemove"/>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -34,13 +35,14 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<style scoped>
+
+section {
   margin-top: 60px;
 }
+
+p {
+  color: steelblue;
+}
+
 </style>
