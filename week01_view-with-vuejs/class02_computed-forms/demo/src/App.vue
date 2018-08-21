@@ -1,19 +1,49 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <header>
+      <AnimalFilter v-bind:onFilter="handleFilter"/>
+      <AnimalSort v-bind:onSort="handleSort"/>
+    </header>
+    <main>
+      <Animals v-bind:filter="filter"
+        v-bind:sort="sort"/>
+    </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Animals from './components/Animals.vue';
+import AnimalFilter from './components/AnimalFilter.vue';
+import AnimalSort from './components/AnimalSort.vue';
 
 export default {
   name: 'app',
+  data() {
+    return {
+      filter: {
+        size: ''
+      },
+      sort: {
+        sort: 'name',
+        direction: 1
+      }
+    };
+  },
   components: {
-    HelloWorld
+    Animals,
+    AnimalFilter,
+    AnimalSort
+  },
+  methods: {
+    handleFilter(filter) {
+      this.filter = filter;
+    },
+    handleSort(sort) {
+      this.sort = sort;
+    }
   }
-}
+};
+
 </script>
 
 <style>
@@ -21,8 +51,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
