@@ -24,14 +24,3 @@ const squareOfBigNumbers = numbers
   });
 
 console.log(squareOfBigNumbers);
-
-// use these, but realize they change the source array
-
-const reversed = numbers.slice().reverse();
-console.log('reverse', reversed, numbers);
-
-const sorted = numbers.slice().sort((a, b) => a - b);
-console.log('sorted', sorted, numbers);
-
-const desSorted = numbers.slice().sort((a, b) => b - a);
-console.log('desSorted', desSorted, numbers);

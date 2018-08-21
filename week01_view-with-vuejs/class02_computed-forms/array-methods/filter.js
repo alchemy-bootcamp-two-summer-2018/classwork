@@ -14,10 +14,11 @@ for(let i = 0; i < numbers.length; i++) {
   }
 }
 
-console.log('using filter');
+console.log('using for loop', filtered);
+
 
 const bigNumbers = numbers.filter((number) => {
   return number > 15;
 })
 
-console.log(bigNumbers);
+console.log('using filter method', bigNumbers);

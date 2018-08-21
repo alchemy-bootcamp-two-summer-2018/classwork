@@ -12,6 +12,19 @@ for(let i = 0; i < numbers.length; i++) {
 
 console.log('using forEach');
 
-numbers.forEach((number) => {
-  console.log(number);
+const result = numbers.forEach((number, i) => {
+  console.log(number, i);
 });
+
+
+const cats = [
+  { name: 'felix', type: 'tuxedo' },
+  { name: 'duchess', type: 'persian' },
+  { name: 'garfield', type: 'orange tabby' },
+];
+
+cats.forEach(cat => {
+  cat.name = cat.name + '!';
+});
+
+console.log('cats!', cats);

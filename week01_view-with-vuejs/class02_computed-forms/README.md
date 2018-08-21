@@ -1,3 +1,5 @@
+Class 02 Computed Properties
+===
 
 ## Agenda
 

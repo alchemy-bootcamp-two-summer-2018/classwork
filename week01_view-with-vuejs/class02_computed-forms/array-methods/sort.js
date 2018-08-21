@@ -1,16 +1,23 @@
 
-const letters = ['z', 'd', 'r', 'a', 'm'];
+// const letters = ['z', 'd', 'r', 'a', 'm'];
 
-letters.sort();
+// letters.sort();
 
-console.log('sorted letters', letters);
+// console.log('sorted letters', letters);
 
 const numbers = [2, 14, 67, 32, 33];
 
-console.log('sorted numbers?', numbers.slice().sort());
+// console.log('sorted numbers?', numbers.slice().sort());
 
 numbers.sort((a, b) => {
-  return a - b
+  console.log('a', a, 'b', b);
+  if(a === b) return 0;
+  if(a > b) return -1;
+  if(b > a) return 1;
+});
+
+numbers.sort((a, b) => {
+  return b - a;
 });
 
 console.log('sorted numbers!', numbers);
@@ -23,19 +30,20 @@ const cats = [
 
 // full way
 const sortedCats = cats.slice().sort((a, b) => {
-  if(b.name === a.name) return 0;
+  if(a.name === b.name) return 0;
   if(a.name > b.name) return 1;
-  if(b.name < a.name) return -1;
+  if(b.name > a.name) return -1;
 });
 
 console.log('sorted cats by name', sortedCats);
 
 // dynamic sort
-let prop = 'name';
+let prop = 'type';
+let direction = -1;
 
 const dynamicSortedCats = cats.slice().sort((a, b) => {
-  if(a[prop] > b[prop]) return 1;
-  if(b[prop] < a[prop]) return -1;
+  if(a[prop] > b[prop]) return 1 * direction;
+  if(b[prop] > a[prop]) return -1 * direction;
   if(b[prop] === a[prop]) return 0;
 });
 

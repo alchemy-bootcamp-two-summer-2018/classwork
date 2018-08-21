@@ -12,10 +12,14 @@ for(let i = 0; i < numbers.length; i++) {
   mapped.push(number ** 2);
 }
 
+console.log(mapped);
+
+
 console.log('using map');
 
 const squares = numbers.map((number) => {
   return number * number;
 })
 
-console.log(squares);
+console.log('squares', squares);
+console.log('numbers', numbers);
