@@ -22,11 +22,14 @@ export default {
   },
   computed: {
     filteredAnimals() {
-      const { size } = this.filter;
-      if(!size) return this.animals;
+      const { size, weight } = this.filter;
+      if(!size && (weight || 0) <= 0) return this.animals;
 
       return this.animals.filter(animal => {
-        return animal.size === size;
+        return (
+          (!size || animal.size === size) &&
+          (!weight || animal.weight > weight)
+        );
       });
     },
     sortedAnimals() {

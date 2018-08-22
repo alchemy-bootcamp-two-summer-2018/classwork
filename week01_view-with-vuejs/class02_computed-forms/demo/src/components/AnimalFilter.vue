@@ -1,9 +1,8 @@
 <template>
-  <form v-on:submit.prevent="handleSubmit">
     <p>
       <label>
         size:
-        <select v-model="selected">
+        <select v-model="selected" v-on:change="handleChange">
           <option value="">All sizes</option>
           <option v-for="size in sizes"
             v-bind:key="size"
@@ -12,11 +11,11 @@
           </option>
         </select>
       </label>
+      <label>
+        weight:
+        <input v-model.number="weight" type="number" v-on:keyup="handleChange">
+      </label>
     </p>
-    <p>
-      <button>Apply</button>
-    </p>
-  </form>
 </template>
 
 <script>
@@ -29,13 +28,15 @@ export default {
   data() {
     return {
       sizes: animalsApi.getSizes(),
-      selected: ''
+      selected: '',
+      weight: ''
     };
   },
   methods: {
-    handleSubmit() {
+    handleChange() {
       const filter = {
-        size: this.selected
+        size: this.selected,
+        weight: this.weight
       };
       this.onFilter(filter);
     }

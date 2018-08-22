@@ -1,18 +1,21 @@
 <template>
-  <form v-on:submit.prevent="handleSubmit">
-    <select v-model="sort">
+  <section>
+    <select v-model="sort" v-on:change="handleChange">
       <option value="name">Name</option>
       <option value="size">Size</option>
       <option value="weight">Weight</option>
     </select>
     <label>
-      <input type="radio" value="1" name="direction" v-model="direction"> asc
+      <input type="radio" value="1" 
+        name="direction" v-model="direction"
+        v-on:change="handleChange"> asc
     </label>
     <label>
-      <input type="radio" value="-1" name="direction" v-model="direction"> desc
+      <input type="radio" value="-1" name="direction" 
+        v-model="direction"
+        v-on:change="handleChange"> desc
     </label>
-    <button>Apply Sort</button>
-  </form>
+  </section>
 </template>
 
 <script>
@@ -27,7 +30,7 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
+    handleChange() {
       this.onSort({
         sort: this.sort, 
         direction: this.direction
