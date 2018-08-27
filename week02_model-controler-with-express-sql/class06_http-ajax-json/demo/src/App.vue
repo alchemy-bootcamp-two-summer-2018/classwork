@@ -1,11 +1,16 @@
 <template>
   <div class="app">
     <header>
-      <!-- <router-link to="/">Home</router-link> -->
-      <router-link to="/people">People</router-link>
+      <img src="./assets/logo.png">
+      <nav>
+        <router-link to="/">Home</router-link>
+        <router-link to="/people">People</router-link>
+      </nav>
     </header>
 
-    <router-view></router-view>
+    <main>
+      <router-view></router-view>
+    </main>
     
   </div>
 </template>
@@ -17,7 +22,31 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+header {
+  height: 75px;
+  background: lightsteelblue;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header img {
+  height: 100%;
+}
+
+nav a {
+  text-decoration: none;
+  color: black;
+  margin: 3px;
+  padding: 3px;
+  border: 1px solid black;
+}
+
+main {
+  padding: 8px;
+}
 
 
 </style>
