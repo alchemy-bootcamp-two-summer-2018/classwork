@@ -2,7 +2,7 @@
   <section class="people">
     <h2>People</h2>
 
-    <PeopleSearch :onSearch="handleSearch"/>
+    <PeopleSearch :onSearch="handleSearch" :search="search"/>
     
     <Loader :loading="loading"/>
 
@@ -13,8 +13,8 @@
     <p v-if="search">Searching for &quot;{{ search }}&quot;</p>
     <div class="search-container">
       <ul v-if="people">
-        <Person v-for="person in people"
-          :key="person.name"
+        <Person v-for="(person, i) in people"
+          :key="i"
           :person="person"
         />
       </ul>
@@ -45,15 +45,29 @@ export default {
     PeopleSearch,
     Loader
   },
-  // created() {
-  //   this.searchPeople();
-  // },
+  created() {
+    const query = this.$router.history.current.query;
+    if(query) {
+      this.handleSearch(query.search);
+    }
+  },
+  watch: {
+    $route(newRoute, oldRoute) {
+      const newSearch = newRoute.query.search;
+      const oldSearch = oldRoute.query.search;
+      if(newSearch === oldSearch) return;
+      
+      this.handleSearch(newSearch);
+    }
+  },
   methods: {
     handleSearch(search) {
-      this.search = search;
+      this.search = search || '';
       this.searchPeople();
     },
     searchPeople() {
+      if(!this.search) return;
+
       this.loading = true;
       this.error = null;
 
