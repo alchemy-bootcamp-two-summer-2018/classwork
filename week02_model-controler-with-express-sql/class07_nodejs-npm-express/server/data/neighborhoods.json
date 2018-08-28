@@ -47,5 +47,12 @@
     "population": "1337",
     "founded": "2017",
     "description": "go a c l"
+  },
+  {
+    "name": "kiwi",
+    "city": "Portland",
+    "population": "2323",
+    "founded": "2323",
+    "description": "thing to add"
   }
 ]

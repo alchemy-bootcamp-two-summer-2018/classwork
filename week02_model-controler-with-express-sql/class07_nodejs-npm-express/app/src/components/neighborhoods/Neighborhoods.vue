@@ -4,8 +4,8 @@
   <p v-if="!neighborhoods">Loading neighborhoods...</p>
   <ul v-else class="list">
     <Neighborhood
-      v-for="neighborhood in neighborhoods"
-      :key="neighborhood.name"
+      v-for="(neighborhood, index) in neighborhoods"
+      :key="index"
       :neighborhood="neighborhood"
     />
   </ul>
@@ -16,7 +16,7 @@
 <script>
 import Neighborhood from './Neighborhood';
 import AddNeighborhood from './AddNeighborhood.vue';
-import { getNeighborhoods, addNeighborhood } from '../../services/api';
+import api from '../../services/api';
 
 export default {
   data() {
@@ -25,7 +25,7 @@ export default {
     };
   },
   created() {
-    getNeighborhoods()
+    api.getNeighborhoods()
       .then(neighborhoods => {
         this.neighborhoods = neighborhoods;
       });
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     handleAdd(neighborhood) {
-      return addNeighborhood(neighborhood)
+      return api.addNeighborhood(neighborhood)
         .then(saved => {
           this.neighborhoods.push(saved);
         });
