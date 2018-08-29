@@ -1,33 +1,13 @@
 # PostgreSQL Shell Cheat Sheet
 
-## Starting the server
-
-You _may_ do this every time you restart your machine. Depending on your settings, your database may autostart when your computer restarts.
-
-```sh
-$ pgstart
-
-# pgstart is an alias for the following command
-$ pg_ctl -D /usr/local/var/postgres/ -l /usr/local/var/postgres/server.log start
-
-# If you installed postgreSQL with HomeBrew, you can also do this:
-$ brew services start postgres
-```
-
-## Creating a user-default database
+## Creating a database
 
 ```
-$ createdb
+$ CREATE DATABASE animals;
 ```
 
-* This will create a new database with the same name as your user login 
-* You only have to do this once
-
-```
-$ createdb animals
-```
-
-This will create a new database called animals, which can contain many individual tables
+* This will create a new database called animals, which can contain many individual tables
+* You only have to do this once per database
 
 ## Starting the postgres shell
 
