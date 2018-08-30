@@ -47,12 +47,10 @@
 </template>
 
 <script>
-import api from '../../services/api';
 
 const initNeigborhood = () => {
   return {
     name: '',
-    city: 'Portland',
     population: '',
     founded: '',
     description: ''
@@ -63,6 +61,7 @@ export default {
   props: {
     neighborhood: Object,
     label: String,
+    quadrants: Array,
     onEdit: {
       type: Function,
       required: true
@@ -70,19 +69,13 @@ export default {
   },
   data() {
     return {
-      edit: this.neighborhood ? Object.assign({}, this.neighborhood) : initNeigborhood(),
-      quadrants: []
+      edit: this.neighborhood ? Object.assign({}, this.neighborhood) : initNeigborhood()
     };
   },
   computed: {
     editMode() {
       return !!this.neighborhood;
     }
-  },
-  created() {
-    api.getQuadrants().then(quadrants => {
-      this.quadrants = quadrants;
-    });
   },
   methods: {
     handleSubmit() {

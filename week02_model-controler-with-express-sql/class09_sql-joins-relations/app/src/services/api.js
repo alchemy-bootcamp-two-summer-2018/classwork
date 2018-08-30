@@ -11,6 +11,11 @@ export default {
       .then(response => response.json());
   },
 
+  getNeighborhood(id) {
+    return fetch(`${NEIGHBORHOODS_URL}/${id}`)
+      .then(response => response.json());
+  },
+
   addNeighborhood(neighborhood) {
     return fetch(NEIGHBORHOODS_URL, {
       method: 'POST',

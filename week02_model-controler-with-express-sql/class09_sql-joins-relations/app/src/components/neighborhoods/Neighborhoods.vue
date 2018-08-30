@@ -5,7 +5,7 @@
   <ul v-else class="list">
     <Neighborhood
       v-for="neighborhood in neighborhoods"
-      :key="neighborhood.name"
+      :key="neighborhood.id"
       :neighborhood="neighborhood"
       :on-remove="handleRemove"
       :on-update="handleUpdate"

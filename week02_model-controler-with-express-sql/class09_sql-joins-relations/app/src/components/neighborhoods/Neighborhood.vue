@@ -1,8 +1,8 @@
 <template id="neighborhood-template">
-  <div>
+  <div v-if="neighborhood">
     <article v-if="!editing">
       <h3>{{ neighborhood.name }}</h3>
-      <p>Quadrant: {{ neighborhood.quadrantName }}</p>
+      <p v-if="quadrant">Quadrant: {{ quadrant.name }} ({{ quadrant.direction }})</p>
       <p>Founded: {{ neighborhood.founded }}</p>
       <p class="population">
         Current population: 
@@ -12,14 +12,15 @@
         <span class="size">(a <em>{{ size }}</em> neighborhood)</span>
       </p>
       <p>
-        <button @click="handleClick">remove this neighborhood</button>
+        <button @click="handleRemove">remove this neighborhood</button>
       </p>
     </article>
     <NeighborhoodForm 
       v-else 
       label="Update"
-      :neighborhood="neighborhood" 
-      :on-edit="onUpdate"
+      :neighborhood="neighborhood"
+      :quadrants="quadrants"
+      :onEdit="handleUpdate"
     />
     <button @click="editing = !editing">{{ editing ? 'Cancel' : '✏️' }}</button>
   </div>
@@ -27,22 +28,38 @@
 
 <script>
 import NeighborhoodForm from './NeighborhoodForm';
+import api from '../../services/api';
 
 export default {
   data() {
     return {
+      neighborhood: null,
+      quadrants: null,
       editing: false
     };
   },
   components: {
     NeighborhoodForm
   },
-  props: [
-    'neighborhood',
-    'onRemove',
-    'onUpdate'
-  ],
+  created() {
+    api.getNeighborhood(this.$route.params.id)
+      .then(neighborhood => {
+        this.neighborhood = neighborhood;
+      });
+
+    api.getQuadrants().then(quadrants => {
+      this.quadrants = quadrants;
+    });
+  },
   computed: {
+    quadrant() {
+      if(!this.neighborhood || !this.quadrants) {
+        return null;
+      }
+
+      const { quadrantId } = this.neighborhood;
+      return this.quadrants.find(q => q.id === quadrantId);
+    },
     population() {
       return this.neighborhood.population.toLocaleString();
     },
@@ -51,10 +68,22 @@ export default {
     }
   },
   methods: {
-    handleClick() {
-      if(confirm(`Are you sure you want to remove ${this.neighborhood.name}?`)) {
-        this.onRemove(this.neighborhood.id);
+    handleRemove(id) {
+      if(!confirm(`Are you sure you want to remove ${this.neighborhood.name}?`)) {
+        return;
       }
+
+      return api.removeNeighborhood(id)
+        .then(() => {
+          this.$router.push('/neighborhoods');
+        });
+    },
+    handleUpdate(toUpdate) {
+      return api.updateNeighborhood(toUpdate)
+        .then(updated => {
+          this.neighborhood = updated;
+          this.editing = false;
+        });
     }
   }
 };

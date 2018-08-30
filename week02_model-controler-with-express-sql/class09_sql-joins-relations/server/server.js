@@ -18,13 +18,14 @@ const client = require('./db-client');
 app.get('/api/neighborhoods', (req, res) => {
   client.query(`
     SELECT 
-      id,
-      name, 
-      city,
-      population,
-      founded,
-      description
-    FROM neighborhoods;
+      n.id,
+      n.name, 
+      q.id as "quadrantId",
+      q.name as quadrant
+    FROM neighborhoods as n
+    JOIN quadrants as q
+    ON n.quadrant_id = q.id
+    ORDER BY n.name;
   `)
     .then(result => {
       res.send(result.rows);
@@ -37,7 +38,7 @@ app.get('/api/neighborhoods/:id', (req, res) => {
     SELECT 
       id,
       name, 
-      city,
+      quadrant_id as "quadrantId",
       population,
       founded,
       description
@@ -54,15 +55,14 @@ app.get('/api/neighborhoods/:id', (req, res) => {
 });
 
 app.post('/api/neighborhoods', (req, res) => {
-  console.log('posting');
   const body = req.body;
 
   client.query(`
-    INSERT INTO neighborhoods (name, city, population, founded, description)
+    INSERT INTO neighborhoods (name, quadrant_id, population, founded, description)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *;
   `,
-  [body.name, body.city, body.population, body.founded, body.description]
+  [body.name, body.quadrantId, body.population, body.founded, body.description]
   )
     .then(result => {
       // we always get rows back, in this case we just want first one.
@@ -71,6 +71,36 @@ app.post('/api/neighborhoods', (req, res) => {
     .catch(err => console.log(err));
 });
 
+app.put('/api/neighborhoods/:id', (req, res) => {
+  const body = req.body;
+
+  client.query(`
+    update neighborhoods
+    set
+      name = $1,
+      quadrant_id = $2,
+      population = $3,
+      founded = $4,
+      description = $5
+    where id = $6
+    returning *;
+  `,
+  [body.name, body.quadrantId, body.population, body.founded, body.description, req.params.id]
+  ).then(result => {
+    res.send(result.rows[0]);
+  });
+});
+
+app.get('/api/quadrants', (req, res) => {
+  client.query(`
+    SELECT *
+    FROM quadrants;
+  `)
+    .then(result => {
+      res.send(result.rows);
+    });
+});
 
 // start "listening" (run) the app (server)
-app.listen(3000, () => console.log('app running...'));
+const PORT = 3000;
+app.listen(3000, () => console.log('app running on', PORT));
