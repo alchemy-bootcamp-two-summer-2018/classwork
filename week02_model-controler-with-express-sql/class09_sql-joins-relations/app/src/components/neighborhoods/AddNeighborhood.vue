@@ -16,23 +16,14 @@ export default {
   components: { 
     NeighborhoodForm 
   },
-  data() {
-    return {
-      quadrants: null
-    };
-  },
-  created() {
-    api.getQuadrants()
-      .then(quadrants => {
-        this.quadrants = quadrants;
-      });
+  props: {
+    quadrants: Array
   },
   methods: {
     handleAdd(neighborhood) {
       return api.addNeighborhood(neighborhood)
-        .then(() => {
-          // TODO: change to "id
-          this.$router.push(`/neighborhoods`);
+        .then(added => {
+          this.$router.push(`/neighborhoods/${added.id}`);
         });
     }
   }

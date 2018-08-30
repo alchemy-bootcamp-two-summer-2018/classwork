@@ -31,10 +31,12 @@ import NeighborhoodForm from './NeighborhoodForm';
 import api from '../../services/api';
 
 export default {
+  props: {
+    quadrants: Array
+  },
   data() {
     return {
       neighborhood: null,
-      quadrants: null,
       editing: false
     };
   },
@@ -46,10 +48,6 @@ export default {
       .then(neighborhood => {
         this.neighborhood = neighborhood;
       });
-
-    api.getQuadrants().then(quadrants => {
-      this.quadrants = quadrants;
-    });
   },
   computed: {
     quadrant() {
@@ -68,12 +66,12 @@ export default {
     }
   },
   methods: {
-    handleRemove(id) {
+    handleRemove() {
       if(!confirm(`Are you sure you want to remove ${this.neighborhood.name}?`)) {
         return;
       }
 
-      return api.removeNeighborhood(id)
+      return api.removeNeighborhood(this.neighborhood.id)
         .then(() => {
           this.$router.push('/neighborhoods');
         });

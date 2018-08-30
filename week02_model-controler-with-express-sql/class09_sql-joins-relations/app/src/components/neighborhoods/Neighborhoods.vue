@@ -3,25 +3,21 @@
   <h2>Portland Neighborhoods</h2>
   <p v-if="!neighborhoods">Loading neighborhoods...</p>
   <ul v-else class="list">
-    <Neighborhood
+    <li
       v-for="neighborhood in neighborhoods"
-      :key="neighborhood.id"
-      :neighborhood="neighborhood"
-      :on-remove="handleRemove"
-      :on-update="handleUpdate"
-    />
+      :key="neighborhood.id">
+      <router-link :to="`/neighborhoods/${neighborhood.id}`">
+        {{neighborhood.name}} - {{neighborhood.quadrant}}
+      </router-link>
+    </li>
   </ul>
-
-  <h3>Add a new neighborhood</h3>
-  <NeighborhoodForm 
-    label="Add"
-    :onEdit="handleAdd"/>
+  <p>
+    <router-link to="/neighborhoods/add">Add a new neighborhood</router-link>
+  </p>
 </section>
 </template>
 
 <script>
-import Neighborhood from './Neighborhood';
-import NeighborhoodForm from './NeighborhoodForm.vue';
 import api from '../../services/api';
 
 export default {
@@ -35,45 +31,22 @@ export default {
       .then(neighborhoods => {
         this.neighborhoods = neighborhoods;
       });
-  },
-  components: { 
-    Neighborhood,
-    NeighborhoodForm 
-  },
-  methods: {
-    handleAdd(neighborhood) {
-      return api.addNeighborhood(neighborhood)
-        .then(saved => {
-          this.neighborhoods.push(saved);
-        });
-    },
-    handleRemove(id) {
-      return api.removeNeighborhood(id)
-        .then(() => {
-          const index = this.neighborhoods.findIndex(neighborhood => neighborhood.id === id);
-          if(index === -1) return;
-          this.neighborhoods.splice(index, 1);
-        });
-    },
-    handleUpdate(toUpdate) {
-      return api.updateNeighborhood(toUpdate)
-        .then(updated => {
-          this.neighborhoods = this.neighborhoods.map(neighborhood => {
-            return neighborhood.id === updated.id ? updated : neighborhood;
-          });
-        });
-    }
   }
 };
 
 </script>
 
-<style>
+<style scoped>
 
 ul.list {
   margin: 0;
   padding: 0;
   list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: initial;
 }
 
 </style>

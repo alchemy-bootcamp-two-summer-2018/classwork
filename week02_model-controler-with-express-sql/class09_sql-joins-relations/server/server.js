@@ -91,6 +91,16 @@ app.put('/api/neighborhoods/:id', (req, res) => {
   });
 });
 
+app.delete('/api/neighborhoods/:id', (req, res) => {
+  client.query(`
+    delete from neighborhoods where id=$1;
+  `,
+  [req.params.id]
+  ).then(() => {
+    res.send({ removed: true });
+  });
+});
+
 app.get('/api/quadrants', (req, res) => {
   client.query(`
     SELECT *

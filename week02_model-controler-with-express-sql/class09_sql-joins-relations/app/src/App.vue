@@ -9,15 +9,26 @@
     </header>
 
     <main>
-      <router-view></router-view>
+      <router-view :quadrants="quadrants"></router-view>
     </main>
   </div>
 </template>
 
 <script>
+import api from './services/api';
 
 export default {
-
+  data() {
+    return {
+      quadrants: null
+    };
+  },
+  created() {
+    api.getQuadrants()
+      .then(quadrants => {
+        this.quadrants = quadrants;
+      });
+  },
 };
 
 </script>
