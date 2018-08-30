@@ -1,4 +1,5 @@
 const client = require('../db-client');
+// okay to import "json", you will get JavaScript objects :)
 const quadrants = require('./quadrants.json');
 
 Promise.all(
@@ -8,7 +9,7 @@ Promise.all(
         VALUES ($1, $2);
     `,
     [quadrant.name, quadrant.direction]
-    ).then(result => result.rows[0]);
+    );
   })
 )
   .then(

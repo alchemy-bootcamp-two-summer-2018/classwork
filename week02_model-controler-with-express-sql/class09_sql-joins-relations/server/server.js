@@ -12,11 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // connect to the database
-const pg = require('pg');
-const Client = pg.Client;
-const databaseUrl = 'postgres://localhost:5432/livable_cities';
-const client = new Client(databaseUrl);
-client.connect();
+const client = require('./db-client');
 
 // routes
 app.get('/api/neighborhoods', (req, res) => {

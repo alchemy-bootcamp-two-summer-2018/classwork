@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Hawthorn",
+    "city": "Portland",
+    "population": 31821,
+    "founded": "1830",
+    "description": "Something about the neighborhood...",
+    "quadrant": "SE"
+  },
+  {
+    "name": "Alberta",
+    "city": "Portland",
+    "population": 19233,
+    "founded": "1878",
+    "description": "Something about the neighborhood...",
+    "quadrant": "NE"
+  },
+  {
+    "name": "Northwest",
+    "city": "Portland",
+    "population": 40000,
+    "founded": "1899",
+    "description": "Something about the neighborhood...",
+    "quadrant": "NW"
+  },
+  {
+    "name": "Pearl District",
+    "city": "Portland",
+    "population": 23566,
+    "founded": "1820",
+    "description": "Something about the neighborhood...",
+    "quadrant": "NW"
+  },
+  {
+    "name": "Sellwood",
+    "city": "Portland",
+    "population": 13566,
+    "founded": "1824",
+    "description": "Something about the neighborhood...",
+    "quadrant": "SE"
+  },
+  {
+    "name": "Lents",
+    "city": "Portland",
+    "population": 23566,
+    "founded": "1844",
+    "description": "Something about the neighborhood...",
+    "quadrant": "NE"
+  }
+]
