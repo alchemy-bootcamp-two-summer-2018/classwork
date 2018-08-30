@@ -35,3 +35,12 @@ Class 9: SQL Joins & Relations
 
 * Common `pg` `client` module
 * Loading seed data
+
+## Aggregations (Time permitting)
+
+`SQL`:
+
+* Aggregations (`COUNT`, `MIN`, `MAX`, `AVG`)
+* `GROUP BY`
+* `HAVING`
+
