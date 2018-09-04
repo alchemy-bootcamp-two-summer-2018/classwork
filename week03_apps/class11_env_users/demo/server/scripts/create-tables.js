@@ -18,6 +18,7 @@ client.query(`
       id SERIAL PRIMARY KEY,
       name VARCHAR(256),
       quadrant_id INTEGER NOT NULL REFERENCES quadrants(id),
+      user_id INTEGER NOT NULL REFERENCES users(id),
       population INTEGER,
       founded INTEGER,
       description VARCHAR(1024)

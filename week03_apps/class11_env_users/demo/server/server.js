@@ -13,13 +13,102 @@ const morgan = require('morgan');
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
+
 // server files in public directory
 app.use(express.static('public'));
 
 // connect to the database
 const client = require('./db-client');
 
-// routes
+// auth routes
+
+app.post('/api/auth/signup', (req, res) => {
+  const body = req.body;
+  const email = body.email;
+  const password = body.password;
+
+  if(!email || !password) {
+    res.status(400).send({
+      error: 'email and password are required'
+    });
+    return;
+  }
+
+  client.query(`
+    select count(*)
+    from users
+    where email = $1
+  `,
+  [email])
+    .then(results => {
+      if(results.rows[0].count > 0) {
+        res.status(400).send({ error: 'email already in use' });
+        return;
+      }
+
+      client.query(`
+        insert into users (email, password)
+        values ($1, $2)
+        returning id, email
+      `,
+      [email, password])
+        .then(results => {
+          res.send(results.rows[0]);
+        });
+    });
+
+});
+
+app.post('/api/auth/signin', (req, res) => {
+  const body = req.body;
+  const email = body.email;
+  const password = body.password;
+
+  if(!email || !password) {
+    res.status(400).send({
+      error: 'email and password are required'
+    });
+    return;
+  }
+
+  client.query(`
+    select id, email, password
+    from users
+    where email = $1
+  `,
+  [email]
+  )
+    .then(results => {
+      const row = results.rows[0];
+      if(!row || row.password !== password) {
+        res.status(401).send({ error: 'invalid email or password' });
+        return;
+      }
+      res.send({ 
+        id: row.id,
+        email: row.email
+      });
+    });
+});
+
+app.use((req, res, next) => {
+  // is there a Authorization header?
+  const id = req.get('Authorization');
+  if(!id) {
+    // no - send an error
+    res.status(403).send({
+      error: 'No token found'
+    });
+    return;
+  }
+
+  // 1. set req.userId to the header
+  req.userId = id;
+  // 2. call next()
+  next();
+});
+
+// api data routes
 app.get('/api/neighborhoods', (req, res, next) => {
 
   client.query(`
@@ -43,11 +132,11 @@ app.post('/api/neighborhoods', (req, res, next) => {
   if(body.name === 'error') return next('bad name');
   
   client.query(`
-    insert into neighborhoods (name, quadrant_id, population, founded, description)
-    values ($1, $2, $3, $4, $5)
+    insert into neighborhoods (user_id, name, quadrant_id, population, founded, description)
+    values ($1, $2, $3, $4, $5, $6)
     returning *, quadrant_id as "quadrantId";
   `,
-  [body.name, body.quadrantId, body.population, body.founded, body.description]
+  [req.userId, body.name, body.quadrantId, body.population, body.founded, body.description]
   ).then(result => {
     // send back object
     res.send(result.rows[0]);
@@ -66,10 +155,12 @@ app.put('/api/neighborhoods/:id', (req, res, next) => {
       population = $3,
       founded = $4,
       description = $5
-    where id = $6
+    where id = $6,
+    and user_id = $7
     returning *, quadrant_id as "quadrantId";
   `,
-  [body.name, body.quadrantId, body.population, body.founded, body.description, req.params.id]
+  [body.name, body.quadrantId, body.population, body.founded, 
+    body.description, req.params.id, req.userId]
   ).then(result => {
     res.send(result.rows[0]);
   })
@@ -160,76 +251,6 @@ app.get('/api/restaurants', (req, res, next) => {
     .catch(next);
 });
 
-app.post('/api/auth/signup', (req, res, next) => {
-  const body = req.body;
-  const email = body.email;
-  const password = body.password;
-
-  if(!email || !password) {
-    next('email and password are required');
-  }
-
-  client.query(`
-    select count(*)
-    from users
-    where email = $1
-  `,
-  [email])
-    .then(results => {
-      if(results.rows[0].count > 0) {
-        throw new Error('Email already exists');
-      }
-
-      return client.query(`
-        insert into users (email, password)
-        values ($1, $2)
-        returning id
-      `,
-      [email, password]);
-    })
-    .then(results => {
-      res.send({ userId: results.rows[0].id });
-    })
-    .catch(next);
-
-});
-
-app.post('/api/auth/signin', (req, res, next) => {
-  const body = req.body;
-  const email = body.email;
-  const password = body.password;
-
-  if(!email || !password) {
-    next('email and password are required');
-  }
-
-  client.query(`
-    select id, email, password
-    from users
-    where email = $1
-  `,
-  [email]
-  )
-    .then(results => {
-      const row = results.rows[0];
-      if(!row || row.password !== password) {
-        throw new Error('Invalid email or password');
-      }
-      res.send({ userId: row.id });
-    })
-    .catch(next);
-
-});
-
-// must use all 4 parameters so express "knows" this is custom error handler!
-// eslint-disable-next-line
-app.use((err, req, res, next) => {
-  console.log('***SERVER ERROR**\n', err);
-  let message = 'internal server error';
-  if(err.message) message = err.message;
-  else if(typeof err === 'string') message = err;
-  res.status(500).send({ message });
-});
 
 // start "listening" (run) the app (server)
 const PORT = process.env.PORT;

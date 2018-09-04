@@ -8,6 +8,7 @@
           : "New? Click here to sign up"
       }}
     </button>
+    <pre>{{ error }}</pre>
     <form @submit.prevent="handleSubmit">
       <FormControl label="email">
         <input v-model="credentials.email">
@@ -37,6 +38,9 @@ import { signUp, signIn } from '../services/api';
 import FormControl from './FormControl';
 
 export default {
+  props: {
+    onUser: Function
+  },
   components: {
     FormControl
   },
@@ -47,7 +51,8 @@ export default {
         password: ''
       },
       show: false,
-      type: 'signUp'
+      type: 'signIn',
+      error: null
     };
   },
   computed: {
@@ -58,12 +63,25 @@ export default {
       return this.isSignUp ? 'Sign Up' : 'Sign In';
     }
   },
+  watch: {
+    type(newType, oldType) {
+      if(newType !== oldType) {
+        this.error = null;
+      }
+    }
+  },
   methods: {
     handleSubmit() {
+      this.error = null;
       const action = this.isSignUp ? signUp : signIn;
       action(this.credentials)
-        .then(result => console.log(result))
-        .catch(err => console.log(err));
+        .then(user => {
+          this.onUser(user);
+          this.$router.push('/');
+        })
+        .catch(err => {
+          this.error = err;
+        });
     }
   }
 };
