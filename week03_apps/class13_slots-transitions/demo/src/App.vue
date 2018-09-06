@@ -1,23 +1,34 @@
 <template>
-  <div>
-    <LoveAnimalsForm/>
-    <CoolTabs/>
+  <div> 
+    <header>
+      <nav>
+          <RouterLink to="/">Home</RouterLink>
+          &nbsp;
+          <RouterLink to="/slots">Slots</RouterLink>
+          &nbsp;
+          <RouterLink to="/transitions">Transitions</RouterLink>
+          &nbsp;
+        </nav>
+    </header>
+    <main>
+      <transition name="fade">
+        <RouterView/>
+      </transition>
+    </main>
   </div>
 </template>
 
 <script>
-import LoveAnimalsForm from './components/LoveAnimalsForm';
-import CoolTabs from './components/CoolTabs';
 
 export default {
-  components: {
-    LoveAnimalsForm,
-    CoolTabs
-  }  
+ 
 };
 </script>
 
 <style>
-
+section {
+  position: relative;
+  min-height: 200px;
+}
 </style>
 

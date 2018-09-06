@@ -1,0 +1,31 @@
+.fly-enter-active, .fly-leave-active {
+  transition: transform 300ms;
+}
+
+.fly-enter, .fly-leave-to {
+  transform: translateX(500px);
+}
+
+.fly-enter-to, .fly-leave {
+  transform: translateX(0);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 300ms;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to, .fade-leave {
+  opacity: 1;
+}
+
+.fade-move {
+  transition: transform 300ms;
+}
+
+.fade-leave-active {
+  position: absolute;
+}
